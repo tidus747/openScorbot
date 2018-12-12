@@ -1,6 +1,8 @@
 <img width="210" src="./images/scorbot_draw.png" align=right />
+
 # OpenScorbot
-> Controlador libre para el Scorbot ER-U4
+
+>Controlador libre para el Scorbot ER-U4
 
 ## Motivación
 
