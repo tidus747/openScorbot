@@ -14,7 +14,7 @@ básicos a la hora de controlar el robot, saber el estado de sus sensores y adem
 
 ## Recursos
 
-
+- [Wiki del proyecto](https://github.com/tidus747/openScorbot/wiki)
 
 ## Software utilizado
 
@@ -28,3 +28,7 @@ Las referencias consultadas durante el desarrollo han sido las siguientes:
 
 - [Estudio y análisis de las comunicaciones en el robot
 Scorbot-ER 4u](https://accedacris.ulpgc.es/bitstream/10553/25527/1/0742414_00000_0000.pdf)
+- [Manual de usuario del Scorbot ER-4U](ftp://ftp.robotec.co.il/Techsup/er4pcspanish/100269-a%20ER_4pc_Span.pdf)
+- [Simulador 3D y generador de trayectorias para el Scorbot ER-4U](https://github.com/icoderaven/aar-arm)
+- [Toolbox de MATLAB para el control del Scorbot](https://github.com/kutzer/ScorBotToolbox  )
+- [Controlador para el Scorbot ER-4U basado en ARDUINO](https://github.com/amiravni/Scorbot)
