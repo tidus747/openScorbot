@@ -31,3 +31,4 @@ Las referencias consultadas durante el desarrollo han sido las siguientes:
 - [Simulador 3D y generador de trayectorias para el Scorbot ER-4U](https://github.com/icoderaven/aar-arm)
 - [Toolbox de MATLAB para el control del Scorbot](https://github.com/kutzer/ScorBotToolbox  )
 - [Controlador para el Scorbot ER-4U basado en ARDUINO](https://github.com/amiravni/Scorbot)
+- [Estudio sobre la cinemática inversa del Scorbot ER-U4](https://www.researchgate.net/publication/274961840_Inverse_kinematics_solution_for_trajectory_tracking_using_artificial_neural_networks_for_SCORBOT_ER-4u)
