@@ -1,21 +1,26 @@
-shaftDiameter = 3.30;
-wheelDiameter = 28;
-shaftMargin = 2.5;
-shaftHeight = 5;
-shaftBevel = 0.3;
-wheelHeigh = 0.75;
-wheelGrooveDepth = 0.0;
+shaftDiameter = 4;
+wheelDiameter = 32;
+shaftMargin = 4;
+shaftHeight = 7;
+shaftBevel = 0;
+wheelHeigh = 1;
+wheelGrooveDepth = 0;
 
-encoderInnerRadius = 9.5;
-encoderOuterRadius = 13;
-encoderSlitWidth = 0.8;
-encoderSlitMargin = 0.8;
-encoderSlitCount = 35;
+encoderInnerRadius = 9;
+encoderOuterRadius = 15;
+encoderSlitWidth = 1;
+encoderSlitMargin = 3;
+encoderSlitCount = 20;
 
 shaftR = shaftDiameter/2;
 wheelR = wheelDiameter/2;
 
+putScrew = true;
+screwDiameter = 1.15;
+
 encoderSlitLength = encoderOuterRadius-encoderInnerRadius;
+
+
 
 difference () {
 
@@ -30,4 +35,14 @@ difference () {
 			}
 		}
 	}
+    
+    if(putScrew){
+    rotate([90,0,0])
+    translate([0,wheelHeigh+shaftHeight/2,-3])
+    cylinder(h = shaftMargin+2, r1 = screwDiameter, $fa = 20, $fs = 0.1, r2 = screwDiameter, center = true);
+    }
+    
 }
+
+
+
