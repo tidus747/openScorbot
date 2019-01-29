@@ -26,7 +26,7 @@ encoderSlitLength = encoderOuterRadius-encoderInnerRadius;
 
 difference () {
 
-	rotate_extrude($fn=200) polygon( points=[[shaftR,0],[wheelR,0],[wheelR-wheelGrooveDepth,wheelHeigh/2],[wheelR,wheelHeigh],[shaftR+shaftMargin,wheelHeigh],[shaftR+shaftMargin,shaftHeight],[shaftR+shaftBevel,shaftHeight],[shaftR,shaftHeight-shaftBevel]] );
+	rotate_extrude($fn=200, convexity = 10) polygon( points=[[shaftR,0],[wheelR,0],[wheelR-wheelGrooveDepth,wheelHeigh/2],[wheelR,wheelHeigh],[shaftR+shaftMargin,wheelHeigh],[shaftR+shaftMargin,shaftHeight],[shaftR+shaftBevel,shaftHeight],[shaftR,shaftHeight-shaftBevel]] );
 	
 	union() {
 		for(i=[0:encoderSlitCount-1]) {
