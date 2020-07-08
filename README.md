@@ -20,7 +20,8 @@ básicos a la hora de controlar el robot, saber el estado de sus sensores y adem
 
 El software utilzado para el desarrollo de este controlador ha sido el siguiente:
 
-- [Python 2.7](https://www.python.org/download/releases/2.7/) - Lenguaje de programación de alto nivel.
+- [Python 3.6.9](https://www.python.org/downloads/release/python-369/) - Lenguaje de programación de alto nivel.
+- [Qt 5 Designer 5.9.5](https://www.qt.io) - Platarforma de desarrollo y diseño de interfaces gráficas.
 
 ## Referencias
 
