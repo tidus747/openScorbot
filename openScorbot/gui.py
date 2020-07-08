@@ -1,5 +1,5 @@
 # Autores: Jose Luis Pérez Pérez y Yolanda M. Gimeno Rodríguez
-# Fecha:
+# Fecha: 08/07/2020
 # Título: Script Main del Open Scorbot.
 # Universidad de La Laguna
 
