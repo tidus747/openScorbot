@@ -1,35 +1,199 @@
-<img width="210" src="./images/scorbot_draw.png" align=right />
-
 # OpenScorbot
 
->Controlador libre para el Scorbot ER-U4
+Open low-level control project for the Scorbot ER-4U robotic arm.
 
-## Motivación
+![Python](https://img.shields.io/badge/Python-3.6%20legacy-3776AB?logo=python&logoColor=white)
+![Qt](https://img.shields.io/badge/GUI-PyQt5-41CD52?logo=qt&logoColor=white)
+![USB](https://img.shields.io/badge/Interface-PyUSB-blue)
+![License](https://img.shields.io/badge/License-GPLv3-blue)
 
-La idea de desarrollar un controlador libre para el **Scorbot ER-4U** surgió a raíz de la
-imposibilidad brazo accediendo directamente a sus motores por medio de un terminal. Esto no supone muchos problemas a nivel usuario, es decir, usos que no requieran el uso de cinemáticas ya sean directas o inversas. Sin embargo, si se requiere un control sobre estos parámetros o un **control a bajo nivel** del robot, con el [*software*](https://www.intelitek.com/robots/robotic-software/scorbase/) disponible no es posible.
+## Overview
 
-Por ello, se propone crear un controlador propio y libre que permita acceder a los elementos
-básicos a la hora de controlar el robot, saber el estado de sus sensores y además ser capaz de dar órdenes de movimiento.
+OpenScorbot explores direct control of the Scorbot ER-4U beyond the limitations of the original user-facing software.
 
-## Recursos
+The project works close to the controller and robot state, including:
 
-- [Wiki del proyecto](https://github.com/tidus747/openScorbot/wiki)
+- USB communication with the original controller
+- controller initialization and synchronization
+- encoder-state handling
+- joint-level movement
+- homing using limit switches
+- Cartesian target movement
+- inverse kinematics
+- operator GUI
+- physical homing and encoder tooling
 
-## Software utilizado
+This is a historical robotics project and should be read as an engineering implementation and reference, not as a modern production robotics framework.
 
-El software utilzado para el desarrollo de este controlador ha sido el siguiente:
+## System architecture
 
-- [Python 3.6.9](https://www.python.org/downloads/release/python-369/) - Lenguaje de programación de alto nivel.
-- [Qt 5 Designer 5.9.5](https://www.qt.io/download-qt-installer?hsCtaTracking=99d9dd4f-5681-48d2-b096-470725510d34%7C074ddad0-fdef-4e53-8aa8-5e8a876d6ab4) - Platarforma de desarrollo y diseño de interfaces gráficas.
+```mermaid
+flowchart LR
+    UI[PyQt5 GUI] --> Q[Command queue]
+    Q --> EXEC[Command execution]
 
-## Referencias
+    USB[USB controller] --> SYNC[Synchronization]
+    SYNC --> STATE[Encoder state]
+    STATE --> EXEC
 
-Las referencias consultadas durante el desarrollo han sido las siguientes:
+    EXEC --> PROTO[Protocol messages]
+    PROTO --> USB
 
-- [Estudio y análisis de las comunicaciones en el robot Scorbot-ER 4u](https://accedacris.ulpgc.es/bitstream/10553/25527/1/0742414_00000_0000.pdf)
-- [Manual de usuario del Scorbot ER-4U](ftp://ftp.robotec.co.il/Techsup/er4pcspanish/100269-a%20ER_4pc_Span.pdf)
-- [Simulador 3D y generador de trayectorias para el Scorbot ER-4U](https://github.com/icoderaven/aar-arm)
-- [Toolbox de MATLAB para el control del Scorbot](https://github.com/kutzer/ScorBotToolbox  )
-- [Controlador para el Scorbot ER-4U basado en ARDUINO](https://github.com/amiravni/Scorbot)
-- [Estudio sobre la cinemática inversa del Scorbot ER-U4](https://www.researchgate.net/publication/274961840_Inverse_kinematics_solution_for_trajectory_tracking_using_artificial_neural_networks_for_SCORBOT_ER-4u)
+    EXEC --> JOINT[Joint motion]
+    EXEC --> HOME[Homing]
+    EXEC --> XYZ[Cartesian movement]
+
+    XYZ --> IK[Inverse kinematics]
+    IK --> JOINT
+```
+
+See [docs/architecture.md](docs/architecture.md) for the detailed software and control view.
+
+## Main capabilities
+
+### Direct controller communication
+
+The application uses PyUSB to locate and communicate with the Scorbot controller.
+
+It handles:
+
+- USB device discovery
+- endpoint configuration
+- controller initialization
+- protocol message exchange
+- sequence synchronization
+
+Low-level message definitions live primarily in `openScorbot/libhex.py`.
+
+### Joint motion
+
+The motion layer supports the main robot axes:
+
+- hip
+- shoulder
+- elbow
+- wrist pitch
+- wrist roll
+- gripper
+
+Movement logic uses encoder state and controller error feedback.
+
+### Homing
+
+`openScorbot/setHome.py` implements the homing sequence using limit switches and encoder feedback.
+
+The goal is to establish a known reference state before normal movement.
+
+### Cartesian motion
+
+`openScorbot/moveXYZ.py` converts Cartesian targets into joint targets and then into encoder movement.
+
+```mermaid
+flowchart LR
+    XYZ[Target X Y Z] --> IK[Inverse kinematics]
+    IK --> ANG[Joint angles]
+    ANG --> ENC[Encoder targets]
+    ENC --> MOVE[Coordinated movement]
+    MOVE --> FB[Encoder feedback]
+```
+
+### Configuration
+
+`openScorbot/conf.py` defines and generates runtime configuration including:
+
+- timing
+- encoder positions
+- error thresholds
+- homing parameters
+- link geometry
+- inverse-kinematics parameters
+
+## Physical tooling
+
+The repository also contains mechanical artifacts under `models/`:
+
+- encoder-related 3D models
+- STL and OpenSCAD files
+- homing jig resources
+- DXF and SVG manufacturing files
+
+This is an important part of the project because robot control and calibration are not purely software problems.
+
+## Repository map
+
+```text
+openScorbot/
+|-- docs/
+|   |-- architecture.md
+|   `-- project-context.md
+|-- images/
+|-- models/
+|   |-- encoder/
+|   `-- home_jig/
+|-- openScorbot/
+|   |-- gui.py
+|   |-- libcomm.py
+|   |-- libdef.py
+|   |-- libhex.py
+|   |-- libsync.py
+|   |-- moveXYZ.py
+|   |-- setHome.py
+|   `-- ...
+|-- references/
+|-- src/
+|-- CONTRIBUTING.md
+|-- LICENSE
+`-- README.md
+```
+
+## Attribution
+
+This repository contains work by multiple contributors.
+
+Several source files explicitly credit:
+
+- Jose Luis Perez Perez
+- Yolanda M. Gimeno Rodriguez
+
+Other repository material and project history include work by Iván Rodríguez-Méndez.
+
+The original source-level attribution is intentionally preserved.
+
+See [docs/project-context.md](docs/project-context.md) for additional context.
+
+## Historical environment
+
+The codebase reflects the development environment used at the time, including:
+
+- Python 3.6-era code
+- PyQt5
+- PyUSB
+- direct control of the original Scorbot ER-4U controller
+
+The software has not been modernized to current Python or robotics frameworks as part of this repository refresh.
+
+## Safety
+
+This project can command real robot motion.
+
+Any change to communication, homing or movement logic should be considered hardware-affecting and validated carefully on compatible equipment.
+
+## Development workflow
+
+The original history is preserved. Current maintenance uses GitFlow without rewriting legacy commits.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## References
+
+The repository contains the Scorbot manual under `references/` and the original project README referenced additional work related to:
+
+- Scorbot communications
+- simulation and trajectory generation
+- MATLAB control tooling
+- Arduino-based Scorbot controllers
+- inverse kinematics
+
+## License
+
+Released under the GNU General Public License v3.0. See [LICENSE](LICENSE).
